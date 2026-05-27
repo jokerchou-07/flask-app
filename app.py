@@ -12,7 +12,7 @@ def index():
         <li><a href="/ex45">Exercise 45</a></li>
         <li><a href="/ex46/home">Exercise 46(Home)</a></li>
         <li><a href="/ex46/Apple">Exercise 46(Picture)</a></li>
-        <li><a href="/ex47/Kevin">Exercise 47</a></li>
+        <li><a href="/ex47">Exercise 47</a></li>
         <li><a href="/ex48">Exercise 48</a></li>
     </ul>
     '''
