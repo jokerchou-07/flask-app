@@ -6,15 +6,14 @@ app = Flask(__name__)
 @app.route('/')
 def index():
     return '''
-    <h1>Flask Exercises (43 - 48)</h1>
     <ul>
-        <li><a href="/ex43">Exercise 43: Index Page</a></li>
-        <li><a href="/ex44">Exercise 44: Hello Flask</a></li>
-        <li><a href="/ex45">Exercise 45: HTTP Methods (Login)</a></li>
-        <li><a href="/ex46/home">Exercise 46: Load HTML (Home)</a></li>
-        <li><a href="/ex46/Apple">Exercise 46: Load HTML (Apple)</a></li>
-        <li><a href="/ex47/Kevin">Exercise 47: Rendering Templates (Hello Name)</a></li>
-        <li><a href="/ex48">Exercise 48: Compute Double</a></li>
+        <li><a href="/ex43">Exercise 43</a></li>
+        <li><a href="/ex44">Exercise 44</a></li>
+        <li><a href="/ex45">Exercise 45</a></li>
+        <li><a href="/ex46/home">Exercise 46(Home)</a></li>
+        <li><a href="/ex46/Apple">Exercise 46(Picture)</a></li>
+        <li><a href="/ex47/Kevin">Exercise 47</a></li>
+        <li><a href="/ex48">Exercise 48</a></li>
     </ul>
     '''
 
@@ -74,12 +73,37 @@ def ex46_apple():
     return render_template_string(html_content)
 
 # ==========================================
-# Exercise 47: Rendering Templates (Variable Rules)
+# Exercise 47: Show Variables
 # ==========================================
-@app.route('/ex47/')
-@app.route('/ex47/<name>')
-def ex47_hello(name="World"):
-    return f'<h1>Hello, {name}!</h1>'
+@app.route('/ex47')
+def ex47_show_variables():
+    # 投影片指定的 Python object (字典)
+    x = {
+        "name": "John",
+        "age": 30,
+        "city": "New York"
+    }
+    
+    # 使用 Jinja2 語法 {{ }} 來顯示變數
+    html_template = '''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Exercise 47: Show Variables</title>
+    </head>
+    <body>
+        <h2>Python Object Variables in HTML</h2>
+        <ul>
+            <li><strong>Name:</strong> {{ data.name }}</li>
+            <li><strong>Age:</strong> {{ data.age }}</li>
+            <li><strong>City:</strong> {{ data.city }}</li>
+        </ul>
+    </body>
+    </html>
+    '''
+    
+    # 將字典 x 作為 data 變數傳遞給 HTML 模板
+    return render_template_string(html_template, data=x)
 
 # ==========================================
 # Exercise 48: Show double of inputted number (對應截圖 3)
