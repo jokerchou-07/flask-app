@@ -1,19 +1,41 @@
-from flask import Flask, render_template_string, request, jsonify
+from flask import Flask, request, render_template_string
 
 app = Flask(__name__)
 
-# Exercise 43: Flask Online
+# 根目錄：做一個簡單的導覽頁面，方便教授批改點擊
 @app.route('/')
+def index():
+    return '''
+    <h1>Flask Exercises (43 - 48)</h1>
+    <ul>
+        <li><a href="/ex43">Exercise 43: Index Page</a></li>
+        <li><a href="/ex44">Exercise 44: Hello Flask</a></li>
+        <li><a href="/ex45">Exercise 45: HTTP Methods (Login)</a></li>
+        <li><a href="/ex46/home">Exercise 46: Load HTML (Home)</a></li>
+        <li><a href="/ex46/Apple">Exercise 46: Load HTML (Apple)</a></li>
+        <li><a href="/ex47/Kevin">Exercise 47: Rendering Templates (Hello Name)</a></li>
+        <li><a href="/ex48">Exercise 48: Compute Double</a></li>
+    </ul>
+    '''
+
+# ==========================================
+# Exercise 43: Flask Online (Index Page)
+# ==========================================
+@app.route('/ex43')
 def ex43_index():
     return 'Index Page'
 
-# Exercise 44: Routing & Variable Rules
-@app.route('/user/<username>')
-def ex44_show_user_profile(username):
-    return f'User: {username}'
+# ==========================================
+# Exercise 44: Hello Flask (對應截圖 2)
+# ==========================================
+@app.route('/ex44')
+def ex44_hello():
+    return 'Hello, World!'
 
+# ==========================================
 # Exercise 45: HTTP Methods
-@app.route('/login', methods=['GET', 'POST'])
+# ==========================================
+@app.route('/ex45', methods=['GET', 'POST'])
 def ex45_login():
     if request.method == 'POST':
         username = request.form.get('username', 'Guest')
@@ -27,39 +49,73 @@ def ex45_login():
     '''
     return render_template_string(html_form)
 
-# Exercise 46: Static Files
-@app.route('/static_demo')
-def ex46_static():
-    return 'Static files are served from /static folder. Example: /static/style.css'
-
-# Exercise 47: Rendering Templates
-@app.route('/hello/')
-@app.route('/hello/<name>')
-def ex47_hello(name=None):
-    html_template = '''
-    <!doctype html>
-    <html>
-    <head><title>Hello Page</title></head>
-    <body>
-        <h1>Hello, World!</h1>
-    </body>
-    </html>
+# ==========================================
+# Exercise 46: Flask Load HTML (對應截圖 1)
+# ==========================================
+@app.route('/ex46/home')
+def ex46_home():
+    # 呈現文字與表格
+    html_content = '''
+    <h1>My Website Text</h1>
+    <table border="1" cellpadding="5" cellspacing="0">
+        <tr><td>Text Text Text</td><td>Text Text Text</td><td>Text Text Text</td></tr>
+        <tr><td>Text Text Text</td><td>Text Text Text</td><td>Text Text Text</td></tr>
+        <tr><td>Text Text Text</td><td>Text Text Text</td><td>Text Text Text</td></tr>
+    </table>
     '''
-    if name:
-        html_template = html_template.replace('World', name)
-    return render_template_string(html_template)
+    return render_template_string(html_content)
 
-# Exercise 48: About JSON
-@app.route('/api/data')
-def ex48_json():
-    return jsonify({
-        "status": "success",
-        "message": "This is Exercise 48 JSON response",
-        "data": {
-            "course": "Web Application Development",
-            "date": "2026-05-27"
-        }
-    })
+@app.route('/ex46/Apple')
+def ex46_apple():
+    # 呈現蘋果圖片 (直接使用網路圖片網址，避免 static 資料夾找不到圖片的問題)
+    html_content = '''
+    <img src="https://upload.wikimedia.org/wikipedia/commons/1/15/Red_Apple.jpg" alt="Apple" width="300">
+    '''
+    return render_template_string(html_content)
+
+# ==========================================
+# Exercise 47: Rendering Templates (Variable Rules)
+# ==========================================
+@app.route('/ex47/')
+@app.route('/ex47/<name>')
+def ex47_hello(name="World"):
+    return f'<h1>Hello, {name}!</h1>'
+
+# ==========================================
+# Exercise 48: Show double of inputted number (對應截圖 3)
+# ==========================================
+# 共用的 HTML 模板
+ex48_template = '''
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Flask Form (Compute the double)</title>
+</head>
+<body>
+    <h2>Input a number</h2>
+    <form action="/ex48/predict" method="post">
+        <input type="number" name="x" required>
+        <button type="submit">Submit</button>
+    </form>
+    
+    {% if result is not none %}
+        <h3>Double Result: {{ result }}</h3>
+    {% endif %}
+</body>
+</html>
+'''
+
+@app.route('/ex48')
+def ex48_index():
+    # 初始頁面，不顯示結果
+    return render_template_string(ex48_template, result=None)
+
+@app.route('/ex48/predict', methods=['POST'])
+def ex48_predict():
+    # 接收表單資料並計算兩倍
+    x = int(request.form['x'])
+    result = x * 2
+    return render_template_string(ex48_template, result=result)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
