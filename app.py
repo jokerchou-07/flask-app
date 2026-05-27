@@ -2,33 +2,23 @@ from flask import Flask, render_template_string, request, jsonify
 
 app = Flask(__name__)
 
-# ==========================================
-# Exercise 43: Flask Online (首頁)
-# 路由: /
-# ==========================================
+# Exercise 43: Flask Online
 @app.route('/')
 def ex43_index():
     return 'Index Page'
 
-# ==========================================
-# Exercise 44: Routing & Variable Rules (動態路由)
-# 路由: /user/<username>  (例如: /user/Kevin)
-# ==========================================
+# Exercise 44: Routing & Variable Rules
 @app.route('/user/<username>')
 def ex44_show_user_profile(username):
     return f'User: {username}'
 
-# ==========================================
-# Exercise 45: HTTP Methods (GET/POST 表單處理)
-# 路由: /login
-# ==========================================
+# Exercise 45: HTTP Methods
 @app.route('/login', methods=['GET', 'POST'])
 def ex45_login():
     if request.method == 'POST':
         username = request.form.get('username', 'Guest')
         return f'Logged in as {username} (POST)'
     
-    # GET 請求時，返回一個簡單的 HTML 表單供測試
     html_form = '''
     <form method="post">
         Username: <input type="text" name="username">
@@ -37,18 +27,12 @@ def ex45_login():
     '''
     return render_template_string(html_form)
 
-# ==========================================
-# Exercise 46: Static Files (靜態檔案路由說明)
-# 路由: /static_demo
-# ==========================================
+# Exercise 46: Static Files
 @app.route('/static_demo')
 def ex46_static():
     return 'Static files are served from /static folder. Example: /static/style.css'
 
-# ==========================================
-# Exercise 47: Rendering Templates (樣式渲染)
-# 路由: /hello/ 或 /hello/<name>
-# ==========================================
+# Exercise 47: Rendering Templates
 @app.route('/hello/')
 @app.route('/hello/<name>')
 def ex47_hello(name=None):
@@ -57,21 +41,15 @@ def ex47_hello(name=None):
     <html>
     <head><title>Hello Page</title></head>
     <body>
-        {% if name %}
-          <h1>Hello {name}!</h1>
-        {% else %}
-          <h1>Hello, World!</h1>
-        {% endif %}
+        <h1>Hello, World!</h1>
     </body>
     </html>
     '''
-    res_html = html_template.replace('{name}', name if name else 'World')
-    return render_template_string(res_html)
+    if name:
+        html_template = html_template.replace('World', name)
+    return render_template_string(html_template)
 
-# ==========================================
-# Exercise 48: About JSON (返回 JSON 資料)
-# 路由: /api/data
-# ==========================================
+# Exercise 48: About JSON
 @app.route('/api/data')
 def ex48_json():
     return jsonify({
